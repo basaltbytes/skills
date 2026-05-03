@@ -1,6 +1,6 @@
 ---
 name: odoo-frontend
-description: "Use when creating, editing, debugging, or reviewing Odoo 19 web-client customizations in JavaScript or arch XML: asset bundles, `@odoo-module` imports, registries, systray items, client actions, command providers, browser-backed frontend state, `patch(...)`, view descriptors, `js_class`, `searchModel`, built-in or custom views, field widgets, view widgets, modifiers, `options=`, or XPath inheritance. Pair with `owl` for Owl internals and `odoo-19-javascript-testing` for Hoot and web test helpers. Do not use for backend ORM or generic Owl/JavaScript concepts."
+description: "Use when working on Odoo 19 web-client customizations in JavaScript or arch XML: assets, `@odoo-module`, registries, services, systray/client actions, browser state, `patch(...)`, view descriptors, `js_class`, `searchModel`, modifiers, `options=`, XPath inheritance, built-in/custom views, field/view widgets, `standardFieldProps`, or `extractProps`. Not for backend ORM, Hoot tests, Owl internals, or generic JS/Owl."
 metadata:
   author: Philippe L'ATTENTION
   version: "2026.4.22"
@@ -11,9 +11,7 @@ metadata:
 
 # Odoo 19 Frontend
 
-This skill is for Odoo-specific extension points and parser quirks, not for generic frontend theory. Start from the narrowest reference that matches the task, and load examples only when you need paste-ready scaffolding.
-
-It intentionally omits material an agent should already know or can recover cheaply from local code: generic Owl semantics, generic services/hooks/components, classical QWeb basics, editor/mobile APIs, and JS testing APIs.
+Use this for Odoo-specific web-client wiring and arch parser quirks, not generic frontend theory. It intentionally skips generic Owl, JS, QWeb, editor/mobile APIs, and testing APIs.
 
 ## Quick Route
 
@@ -71,39 +69,8 @@ A sixth optional `Compiler` converts arch XML into Owl templates at runtime for 
 - Parse arch attributes and options in `extractProps`; keep components ignorant of raw arch XML.
 - Use the examples as scaffolding, not as canonical contracts. For exact behavior, read the nearest parser or descriptor in Odoo source.
 
-## Core References
-
-| Topic | Description | Reference |
-| --- | --- | --- |
-| Assets and Modules | Bundles, manifest directives, lazy loading, named bundles, aliases, import rules, and loading failures | [core-assets-and-modules](references/core-assets-and-modules.md) |
-| Registries and Extension Points | Ordered registries, `actions`, `systray`, `command_provider`, `lazy_components`, and custom registry slots | [core-registries-and-extension-points](references/core-registries-and-extension-points.md) |
-| Client Actions and Shared State | Tutorial-derived patterns for client actions, systray items, shared service state, and browser persistence | [features-client-actions-and-shared-state](references/features-client-actions-and-shared-state.md) |
-| Patching Code | Safe patch timing, `super`, class vs prototype patching, and unpatching for tests | [features-patching-code](references/features-patching-code.md) |
-
-## Views and Widgets
-
-| Topic | Description | Reference |
-| --- | --- | --- |
-| View Architecture | Descriptor keys, runtime resolution, `View` / `WithSearch`, standard props contracts | [view-architecture](references/view-architecture.md) |
-| View Registration | Add a new view type end-to-end or override one with `js_class` | [view-registration](references/view-registration.md) |
-| Advanced Kanban Customization | Tutorial-derived patterns for sidebars, `searchModel`, `t-model`, and pager coordination in `js_class` kanban variants | [advanced-kanban-customization](references/advanced-kanban-customization.md) |
-| Built-in Views | Arch shapes and parser-backed attributes for Odoo's built-in view types | [built-in-views](references/built-in-views.md) |
-| Arch XML | Root tags, modifiers, `context`, `domain`, `groups`, `options`, and removed patterns | [arch-xml](references/arch-xml.md) |
-| View Inheritance | XPath positions, attribute combiners, `move`, and `mode="primary"` vs `extension` | [view-inheritance](references/view-inheritance.md) |
-| Field Widgets | `fields` registry, descriptor shape, `standardFieldProps`, `fieldDependencies`, writes | [field-widgets](references/field-widgets.md) |
-| View Widgets | `view_widgets` registry, descriptor shape, `standardWidgetProps`, widget parsing | [view-widgets](references/view-widgets.md) |
-
-## Examples
-
-| Topic | Description | Reference |
-| --- | --- | --- |
-| Minimal Custom View | Smallest runnable brand-new view type with Python, JS, and XML pieces | [custom-view-minimal](examples/custom-view-minimal.md) |
-| Gallery View | Full custom view with model, renderer, pagination, and click-to-form flow | [gallery-view-full](examples/gallery-view-full.md) |
-| Field Widget | Paste-ready custom `<field widget="color_pill">` example | [field-widget](examples/field-widget.md) |
-| View Widget | Paste-ready custom `<widget name="banner">` example | [view-widget](examples/view-widget.md) |
-| View Inheritance | Common XPath snippets for adding, replacing, moving, and mutating nodes | [view-inheritance](examples/view-inheritance.md) |
-
 ## Cross-Skill Guidance
 
+- Use the [odoo router](../odoo/SKILL.md) when the request is broad, ambiguous, or spans multiple Odoo domains.
 - Use the [owl skill](../owl/SKILL.md) when the task is about Owl component internals, lifecycle, reactivity, props, slots, or template semantics.
-- Use the [odoo-19-javascript-testing skill](../odoo-19-javascript-testing/SKILL.md) when the task needs Hoot assertions, `mountWithCleanup`, `mountView`, `defineModels`, or mock-server control.
+- Use the [odoo-javascript-testing skill](../odoo-javascript-testing/SKILL.md) when the task needs Hoot assertions, `mountWithCleanup`, `mountView`, `defineModels`, or mock-server control.

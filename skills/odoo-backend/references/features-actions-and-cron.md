@@ -5,11 +5,11 @@ description: Returned action dictionaries, server actions, and the correct way t
 
 # Actions and Cron
 
-Backend Odoo code often bridges into the client with action dicts, or into background execution with `ir.cron`. Keep those surfaces small, explicit, and batch-friendly.
+Use this when Python bridges into the client or scheduler. Keep action dicts explicit and cron jobs bounded.
 
 ## Action return values from Python
 
-In practice, most backend button flows should return a dict. `False` is the usual "close dialog" case.
+Most button flows return a dict; `False` usually closes a dialog.
 
 ```python
 return {
@@ -24,7 +24,7 @@ return {
 
 ## Server actions are for declarative/admin flows
 
-Use `ir.actions.server` for admin-driven automation, not as a replacement for normal module code.
+Use `ir.actions.server` for admin-driven automation, not as a replacement for module code. Treat its eval context as privileged server-side execution.
 
 ```xml
 <record id="trip_server_action" model="ir.actions.server">
@@ -43,8 +43,6 @@ if record:
 </record>
 ```
 
-Treat that evaluation context as privileged server-side execution.
-
 ## Report and client actions
 
 - `ir.actions.report`: bind a QWeb report to a model and print menu
@@ -52,7 +50,7 @@ Treat that evaluation context as privileged server-side execution.
 
 ## Scheduled actions (`ir.cron`)
 
-Cron jobs should process a batch, commit progress, and return.
+Cron jobs should process one bounded batch, commit progress, and return.
 
 ```python
 def _cron_process_ready_trips(self, *, limit=300):
@@ -68,15 +66,7 @@ def _cron_process_ready_trips(self, *, limit=300):
 - the framework re-calls as needed
 - do not reschedule the same cron manually
 
-## If you must manage the loop yourself
-
-Keep the pattern, not the exact code:
-
-1. lock
-2. re-check the domain
-3. do bounded work
-4. call `_commit_progress(...)`
-5. stop when the scheduler asks you to
+If managing the loop yourself: lock, re-check the domain, do bounded work, call `_commit_progress(...)`, and stop when the scheduler asks you to.
 
 ## Do not call cron methods directly
 

@@ -1,6 +1,6 @@
 ---
 name: odoo-backend
-description: "Use when creating, debugging, or reviewing Odoo 19 server-side Python, backend XML data, or backend-driven tests and tours: `models.Model`, fields/decorators, ORM queries, `__manifest__.py`, ACL/rules, `@route`, `ir.cron`, JSON-2 or legacy RPC integrations, QWeb reports, `TransactionCase`, `HttpCase`, `Form`, `start_tour`, browser tours, and `--test-tags`. Triggers include Odoo tours, backend tests, Python test helpers, and tour launch/debug flows. Not for Owl/web-client JavaScript, frontend assets, Hoot tests, or client-side view/widget work except when incidental to a backend or tour test change."
+description: "Use when working on Odoo 19 server-side code or backend tests: Python models, ORM recordsets, fields/decorators, domains, SQL/cache, `__manifest__.py`, XML/CSV data, ACLs/rules, `sudo`, controllers, `@route`, `ir.cron`, JSON-2/XML-RPC, QWeb reports, `TransactionCase`, `HttpCase`, `Form`, tours, `start_tour`, or `--test-tags`. Not for web-client JS, Owl internals, Hoot, frontend assets, views, or widgets."
 metadata:
   author: Philippe L'ATTENTION
   version: "2026.4.22"
@@ -11,7 +11,7 @@ metadata:
 
 # Odoo 19 Backend
 
-Load only the narrowest reference that matches the task. This skill intentionally skips basic Python, ORM, and XML explanations and keeps only the parts that routinely cause incorrect Odoo patches or reviews.
+Use this for Odoo-specific server behavior agents often get wrong. It skips generic Python, ORM, and XML material. Load only the narrowest reference that matches the task.
 
 ## Quick Route
 
@@ -31,16 +31,17 @@ Load only the narrowest reference that matches the task. This skill intentionall
 | profiling, batching, prefetch, query budgets, indexes | [performance-profiling-and-batching](references/performance-profiling-and-batching.md) |
 | final review pass, Odoo 19 deltas, common regressions | [best-practices-odoo-19-backend](references/best-practices-odoo-19-backend.md) |
 
-## Default Backend Assumptions
+## Backend Defaults
 
-- Assume every model method can receive empty or multi-record `self` unless it clearly enforces singleton semantics.
-- Treat every public model method as RPC-reachable; keep security checks in Python, ACLs, and rules, not only in views.
-- Prefer ORM first. If you must write SQL, flush first and invalidate cache after writes.
-- Keep work batched: `_read_group`, batch `create`, recordset-aware iteration, and query-count assertions catch most backend regressions.
-- Do not hide invariants in `onchange`, cron wrappers, or controller code. Keep the real business rule on the model.
-- Open [best-practices-odoo-19-backend](references/best-practices-odoo-19-backend.md) for the last review pass before shipping.
+- Model methods may receive empty or multi-record `self`; enforce singleton semantics explicitly.
+- Public model methods are RPC-reachable. Keep security in Python, ACLs, and rules, not only in views.
+- Prefer ORM. If SQL is necessary, flush before reads/writes and invalidate cache after writes.
+- Batch by default: `_read_group`, batch `create`, recordset-aware loops, and query-count checks catch most regressions.
+- Keep real invariants on models, not only in `onchange`, cron wrappers, or controllers.
+- Before shipping, read [best-practices-odoo-19-backend](references/best-practices-odoo-19-backend.md).
 
 ## Cross-Skill Guidance
 
+- Use the [odoo router](../odoo/SKILL.md) when the request is broad, ambiguous, or spans multiple Odoo domains.
 - Use the [odoo-frontend skill](../odoo-frontend/SKILL.md) when the task is primarily web-client JavaScript, views, widgets, arch XML, or frontend assets.
-- Use the [odoo-19-javascript-testing skill](../odoo-19-javascript-testing/SKILL.md) when the task is Hoot, web test helpers, mock-server work, or frontend JS testing internals.
+- Use the [odoo-javascript-testing skill](../odoo-javascript-testing/SKILL.md) when the task is Hoot, web test helpers, mock-server work, or frontend JS testing internals.

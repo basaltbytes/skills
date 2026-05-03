@@ -5,7 +5,7 @@ description: QWeb HTML/PDF reports, translation patterns, custom `_get_report_va
 
 # QWeb Reports
 
-Keep only the report details that regularly break real output: context injection, translation rebrowse, and asset loading.
+Use this for report details that regularly break output: `report_name`, translation rebrowse, custom context, and report assets.
 
 ## Minimal report flow
 
@@ -26,8 +26,6 @@ You need an `ir.actions.report` and a QWeb template whose external ID matches `r
 </template>
 ```
 
-## Report action example
-
 ```xml
 <record id="action_report_business_trip" model="ir.actions.report">
     <field name="name">Business Trip</field>
@@ -38,7 +36,7 @@ You need an `ir.actions.report` and a QWeb template whose external ID matches `r
 </record>
 ```
 
-## Translation pattern
+## Translation
 
 Use a main template plus a translatable sub-template and set `t-lang` on the `t-call`.
 
@@ -99,7 +97,4 @@ Custom fonts must be loaded through `web.report_assets_common`, not backend/comm
 
 ## Reports are URL-addressable
 
-- `/report/html/<report_name>/<id>`
-- `/report/pdf/<report_name>/<id>`
-
-Use the HTML endpoint first when PDF output is wrong; it isolates template issues from PDF conversion issues.
+Use `/report/html/<report_name>/<id>` before `/report/pdf/<report_name>/<id>` when debugging; HTML isolates template issues from PDF conversion issues.

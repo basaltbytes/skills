@@ -1,5 +1,5 @@
 ---
-name: odoo-19-javascript-testing
+name: odoo-javascript-testing
 description: "Use when writing or debugging Odoo 19 frontend JavaScript tests: Owl component tests, service/env tests, view or WebClient interaction tests, mock RPC/model setup, or Hoot assertions and timing. Triggers include `@odoo/hoot`, `@odoo/hoot-dom`, `@web/../tests/web_test_helpers`, `makeMockEnv`, `mountWithCleanup`, `mountView`, `contains`, `defineModels`, `onRpc`, `MockServer`, `expect.step`, `advanceTime`, or requests to mock server state in Odoo tests. Not for Python backend tests or generic Jest/Vitest-only setups."
 ---
 

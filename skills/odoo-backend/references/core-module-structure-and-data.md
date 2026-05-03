@@ -5,9 +5,9 @@ description: Manifest fields, ordered XML/CSV loading, and the practical meaning
 
 # Module Structure and Data Files
 
-Most breakage here is not "how do I write XML?" but "why did this load in the wrong order, stop updating, or become impossible to inherit cleanly?"
+Use this for load order, `noupdate`, external IDs, and data operations.
 
-## Manifest fields that matter most
+## Manifest Fields
 
 ```python
 {
@@ -24,16 +24,11 @@ Most breakage here is not "how do I write XML?" but "why did this load in the wr
 }
 ```
 
-- `depends`: module load graph. Always list what you extend or rely on.
-- `data`: files loaded on install and update.
-- `demo`: demo-only data.
-- `auto_install`: useful for glue/integration modules.
-- `external_dependencies`: declare Python or binary requirements.
-- hooks: use only when ORM and declarative data cannot reasonably do the job.
+Rules: `depends` lists modules you extend/rely on; `data` loads on install/update; `demo` is demo-only; `auto_install` is for glue modules; `external_dependencies` declares Python/binary requirements; hooks are last resort.
 
 ## Data files load sequentially
 
-Later operations can refer to earlier results, not the reverse. Stable external IDs are mandatory for anything you will update, inherit, or reference later.
+Later operations can refer to earlier records, not the reverse. Stable external IDs are mandatory for anything you will update, inherit, or reference.
 
 ## `noupdate` changes upgrade behavior
 
@@ -48,18 +43,12 @@ Later operations can refer to earlier results, not the reverse. Stable external 
 ```
 
 - `noupdate="1"` means install once, then preserve manual edits on module updates.
-- Plain operations outside `noupdate` reload during install and update.
+- Use it for admin-customizable records, not structural records you expect to upgrade.
+- Plain operations outside `noupdate` reload on install and update.
 
-Use `noupdate` for records administrators are expected to customize. Do not place structural records there unless you want to own their upgrades forever.
+## XML Operations
 
-## XML operations that are still worth remembering
-
-- `record`: create or update by external ID
-- `field ref="module.xmlid"`: explicit relational links
-- `field search="[(...)]"`: resolve relation by domain
-- `field eval="..."`: last resort, not the default
-- `function`: use only when declarative records are not enough
-- `delete`: remove by XML ID or by search domain
+Use `record` to create/update by external ID, `field ref="module.xmlid"` for explicit links, `field search="[(...)]"` for domain resolution, `field eval="..."` only when needed, `function` for Python setup flows, and `delete` by XML ID or search domain.
 
 Example:
 
@@ -70,7 +59,7 @@ Example:
 
 Reserve `function` for setup flows that genuinely belong in Python. If static records are enough, keep them declarative.
 
-## Shortcut tags worth knowing
+## Shortcut Tags
 
 - `menuitem`: shorter `ir.ui.menu` definition
 - `template`: shorter `ir.ui.view` definition for QWeb templates
@@ -87,11 +76,4 @@ ACLs are the canonical case.
 
 ## Practical loading order
 
-1. `security/ir.model.access.csv`
-2. security XML such as groups and rules
-3. base data your views/actions depend on
-4. views, menus, actions
-5. reports
-6. demo data
-
-That ordering avoids unresolved references and missing security around menus or actions.
+`security/ir.model.access.csv` -> security XML -> base data -> views/menus/actions -> reports -> demo data.

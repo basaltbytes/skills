@@ -254,5 +254,5 @@ The specific arch (title_field/subtitle_field), CSS, and layout are design choic
 ## Next steps
 
 - For a richer version with image fields, tooltips, pagination, upload: see `examples/gallery-view-full.md`.
-- To extend instead of creating new: see `references/view-inheritance.md` §6.
+- To extend instead of creating new: see `references/view-inheritance.md` and `examples/view-inheritance.md`.
 - To add server-side arch validation, either ship an RNG and register it with `@view_validation.validate(...)` or implement `_validate_tag_my_view` on `ir.ui.view`.

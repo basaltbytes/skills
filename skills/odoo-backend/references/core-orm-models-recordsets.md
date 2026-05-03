@@ -5,13 +5,11 @@ description: Recordset behavior, inheritance modes, reserved fields, and the ORM
 
 # ORM Models and Recordsets
 
-The generic ORM concepts are assumed. Keep this file for the recordset and inheritance rules that regularly break backend patches.
+Use this for recordset and inheritance rules that regularly break backend patches.
 
-## Model choice only matters at the edges
+## Model Types
 
-- `models.Model`: normal persisted records.
-- `models.AbstractModel`: shared behavior or non-record helpers.
-- `models.TransientModel`: wizard data; keep `_log_access` enabled.
+Use `models.Model` for persisted records, `models.AbstractModel` for shared behavior/non-record helpers, and `models.TransientModel` for wizards. Keep `_log_access` enabled on transient models.
 
 ## Recordsets are not single rows
 
@@ -22,30 +20,21 @@ def action_confirm(self):
 ```
 
 - `self` may contain 0, 1, or many records.
-- duplicates are still possible.
-- iterating yields singletons.
-- reading a scalar field on a multi-record recordset raises.
+- Duplicates are possible.
+- Iterating yields singletons.
+- Reading a scalar field on a multi-record recordset raises.
 
-Use:
-
-- `self.ensure_one()` when the method is singleton-only
-- `self.mapped("field_name")` for non-relational multi-record reads
-- set operations `|`, `&`, `-` when staying in recordset land
+Use `ensure_one()` for singleton-only methods, `mapped(...)` for multi-record reads, and set operations `|`, `&`, `-` when staying in recordset land.
 
 ## Prefer field access that stays inside the ORM
 
 Prefer `record[field_name]` over `getattr(record, field_name)` for dynamic field names so the lookup stays inside ORM field semantics.
 
-## Reserved fields with behavior attached
+## Behavior-Attached Reserved Fields
 
-- `name`: display label source
-- `active`: archive/unarchive support
-- `parent_id`, `parent_path`: tree semantics and `child_of` / `parent_of`
-- `company_id`: multi-company consistency checks
+`name` drives display labels; `active` enables archive/unarchive; `parent_id` + indexed `parent_path` enable tree semantics and `child_of` / `parent_of`; `company_id` enables multi-company consistency checks.
 
-If you opt into tree semantics with `parent_path`, declare it with `index=True`.
-
-## Constraints and indexes are model attributes
+## Constraints and Indexes
 
 ```python
 from odoo import fields, models
@@ -65,13 +54,11 @@ class BusinessTrip(models.Model):
     _name_idx = models.Index("(name)")
 ```
 
-This attribute-based path is the modern one documented in the ORM reference and changelog.
+## Inheritance Modes
 
-## Inheritance modes
-
-- Classical inheritance: new model name, borrowed behavior.
-- Extension via `_inherit = "existing.model"`: patch an existing model in place.
-- Delegation via `_inherits`: compose through a `Many2one` foreign key.
+- Classical: `_name` + `_inherit` for a new model with borrowed behavior.
+- Extension: `_inherit = "existing.model"` to patch an existing model in place.
+- Delegation: `_inherits = {"x": "x_id"}` to compose through a `Many2one` FK.
 
 ```python
 class TripProfile(models.Model):
@@ -89,13 +76,11 @@ class BusinessTrip(models.Model):
 
 Warnings from the docs still apply:
 
-- fields delegate, methods do not
-- chained `_inherits` remains fragile
-- avoid `_inherits` unless the composition benefit is real
+- fields delegate, methods do not;
+- chained `_inherits` remains fragile;
+- avoid `_inherits` unless the composition benefit is real.
 
 ## Field incremental definition
-
-When extending a model, redefine a field with the same type to override attributes:
 
 ```python
 class BusinessTrip(models.Model):

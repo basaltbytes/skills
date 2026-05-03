@@ -5,7 +5,7 @@ description: Odoo web controllers, route inheritance rules, and the request envi
 
 # Controllers and HTTP
 
-Use controllers when the transport is HTTP-first: webhooks, downloads, custom public endpoints, or flows that must exist before model-level RPC is the right abstraction.
+Use controllers when transport is HTTP-first: webhooks, downloads, public endpoints, or flows that do not fit model-level RPC.
 
 ## Minimal controller shape
 
@@ -27,7 +27,7 @@ class BusinessTripController(http.Controller):
 
 ## Route inheritance rule that still causes regressions
 
-When overriding a controller method, re-decorate it with `@route()` or the route gets unpublished.
+When overriding a controller method, re-decorate it with `@route()` or the route is unpublished.
 
 ```python
 class ExtendedBusinessTripController(BusinessTripController):
@@ -37,13 +37,13 @@ class ExtendedBusinessTripController(BusinessTripController):
         return response
 ```
 
-- no arguments: keep previous route metadata
-- provided arguments: override previous metadata
+- No arguments keep previous route metadata.
+- Provided arguments override previous metadata.
 
 ## Use controllers sparingly
 
-If the operation is standard business logic on records, keep it on the model and call it through the ORM or JSON-2. Controllers are for routing, auth, transport, or file concerns.
+If the operation is standard record business logic, keep it on the model and call through ORM or JSON-2. Controllers are for routing, auth, transport, or file concerns.
 
 ## Use the request environment, not globals
 
-Controller code should operate through `request.env`, just as model code uses `self.env`. That keeps multi-db, auth, and request transaction handling consistent.
+Use `request.env`, not globals, so multi-db, auth, and request transaction handling stay consistent.

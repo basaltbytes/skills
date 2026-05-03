@@ -32,4 +32,4 @@ export const vendors: Record<string, VendorSkillMeta> = {};
 /**
  * Hand-written skills with Philippe preferences/tastes/recommendations
  */
-export const manual = ["phildl"];
+export const manual = ["phildl", "odoo"];

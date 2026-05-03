@@ -5,7 +5,7 @@ description: "High-signal field patterns for Odoo 19 backend code: computed and 
 
 # Fields and Decorators
 
-Keep only the parts that change backend behavior. The generic field taxonomy is assumed knowledge; the risky parts are recomputation, inverse behavior, and where decorators do and do not run.
+Use this for field behavior that changes correctness: recomputation, inverse behavior, date/datetime handling, and decorators.
 
 ## Computed fields
 
@@ -27,16 +27,15 @@ class BusinessTrip(models.Model):
 ```
 
 - Always assign the field for every record.
-- Dependencies must be accurate; stale `@api.depends(...)` is a common source of incorrect values.
+- Keep `@api.depends(...)` accurate; stale dependencies produce stale stored values.
 - Dotted dependencies like `line_ids.value` are supported.
-- `store=True` makes the field searchable and groupable.
-- Non-stored computed fields need `search=...` if they must appear in backend search domains.
+- `store=True` makes fields searchable/groupable; non-stored computed fields need `search=...` for domains.
 
-## Avoid shared inverse methods across multiple fields
+## Inverse and Related Fields
 
-The ORM docs warn against sharing one inverse method across multiple fields. During inverse computation, sibling inverse-backed fields may be protected and return `False` from cache.
-
-## Related fields are projection, not aggregation
+- Do not share one inverse method across multiple fields; sibling inverse-backed fields can be protected and read as `False` from cache.
+- Related fields are projection, not aggregation.
+- Do not chain through `One2many` or `Many2many` to synthesize aggregate values.
 
 ```python
 nickname = fields.Char(
@@ -45,8 +44,6 @@ nickname = fields.Char(
     depends=["partner_id"],
 )
 ```
-
-Use related fields for lightweight projection. Chaining through `One2many` or `Many2many` to synthesize aggregated values is unsupported.
 
 ## Date and datetime gotchas
 
@@ -60,31 +57,16 @@ deadline = fields.Datetime.now()
 today = fields.Date.context_today(self)
 ```
 
-## Decorators that matter most
+## Decorators
 
-### `@api.depends_context`
-
-Use it when a computed value depends on context keys rather than only fields.
-
-### `@api.constrains`
-
-Use it for cross-field validation after `create()` or `write()`.
-
-```python
-@api.constrains("date_start", "date_end")
-def _check_dates(self):
-    for trip in self:
-        if trip.date_end and trip.date_start and trip.date_end < trip.date_start:
-            raise ValidationError("End date must be after start date.")
-```
-
-### `@api.onchange`
-
-UI helper only. It updates in-memory form values; it is not a persistence, security, import, or RPC guarantee.
-
-### `@api.model_create_multi`
-
-Prefer this on `create()` overrides so batch creation keeps working:
+| Decorator | Use |
+| --- | --- |
+| `@api.depends_context` | Computed value depends on context keys. |
+| `@api.constrains` | Cross-field validation after `create()` / `write()`. |
+| `@api.onchange` | UI-only in-memory form helper; not security, import, persistence, or RPC guarantee. |
+| `@api.model_create_multi` | Required shape for efficient batch `create()` overrides. |
+| `@api.private` | Internal helper that should not be public RPC API. |
+| `@api.ondelete` | Conditional deletion prevention without broad `unlink()` side effects. |
 
 ```python
 @api.model_create_multi
@@ -93,11 +75,3 @@ def create(self, vals_list):
         vals.setdefault("state", "draft")
     return super().create(vals_list)
 ```
-
-### `@api.private`
-
-Use it on internal helpers that should not be part of the public model API.
-
-### `@api.ondelete`
-
-Use it when the goal is preventing deletion under conditions, rather than mixing validation and side effects into a broad `unlink()` override.

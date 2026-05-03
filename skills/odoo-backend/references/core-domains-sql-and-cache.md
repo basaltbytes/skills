@@ -5,7 +5,7 @@ description: Domain builder patterns, search/read APIs, `_read_group`, `search_f
 
 # Domains, SQL, and Cache
 
-This is the main correctness and performance boundary in Odoo backend work. Most regressions here come from per-record queries, stale cache after SQL, or domains assembled unsafely.
+Use this for composed domains, cache-aware reads, batching, and raw SQL safety.
 
 ## Compose domains with `Domain(...)`
 
@@ -21,11 +21,7 @@ domain = Domain("invoice_status", "=", "to invoice") & Domain(
 
 Prefer `Domain(...)` when logic is composed, reused, or partially caller-driven. It is easier to validate and safer than mutating raw list fragments.
 
-Useful operators that are easy to forget:
-
-- hierarchy: `child_of`, `parent_of`
-- relational existence: `any`, `not any`
-- dynamic date parts and relative values
+Useful operators: `child_of`, `parent_of`, `any`, `not any`, dynamic date parts, and relative date strings.
 
 ```python
 Domain("birthday.month_number", "=", 2)
@@ -35,9 +31,11 @@ Domain("deadline", ">=", "=monday -1w")
 
 ## Query APIs that change outcomes
 
-- `search_fetch(...)`: combine search and cache warming when you know the next field reads.
-- `fetch(fields)`: warm an existing recordset.
-- `_read_group(...)`: preferred backend aggregation API; the changelog deprecates backend `read_group`.
+| API | Use |
+| --- | --- |
+| `search_fetch(...)` | Search and warm fields you will read next |
+| `fetch(fields)` | Warm fields on an existing recordset |
+| `_read_group(...)` | Backend aggregation; preferred over backend `read_group` |
 
 ## `_read_group` is often the fix for N+1 counters
 
@@ -85,17 +83,11 @@ self.env.cr.execute(
 trip_ids = [row[0] for row in self.env.cr.fetchall()]
 ```
 
-Raw SQL bypasses ORM security, record rules, and cache semantics. Treat it as an escape hatch, not the default.
+Raw SQL bypasses ORM security, record rules, and cache semantics.
 
-## Flush before SQL reads
+## SQL Cache Sequence
 
-Use the narrowest flush that makes the query correct:
-
-- `self.env.flush_all()`
-- `model.flush_model(["field"])`
-- `records.flush_recordset(["field"])`
-
-## Invalidate after SQL writes
+Use the narrowest flush that makes the query correct: `env.flush_all()`, `model.flush_model([...])`, or `records.flush_recordset([...])`.
 
 ```python
 from odoo.tools import SQL
@@ -114,10 +106,10 @@ records.modified(["state"])
 
 Sequence:
 
-1. flush relevant fields
-2. execute SQL
-3. invalidate caches
-4. call `modified(...)` if computed-field dependencies changed
+1. Flush relevant fields.
+2. Execute SQL.
+3. Invalidate caches.
+4. Call `modified(...)` if computed-field dependencies changed.
 
 ## Prefer framework helpers when they already encode cache behavior
 

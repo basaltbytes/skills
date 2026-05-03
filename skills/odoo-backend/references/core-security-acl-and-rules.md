@@ -5,19 +5,17 @@ description: ACLs, record rules, field-level access, `sudo`, and the security pi
 
 # Security, ACL, and Rules
 
-Keep this file for backend-specific failure modes. The important part is not what ACLs are, but where Odoo code quietly bypasses them.
+Use this for backend security failure modes: where Odoo grants access, where it filters records, and where code bypasses those protections.
 
-## ACLs grant model-level CRUD
+## Access Layers
 
-ACLs are additive. A user's effective model access is the union of all ACLs granted through their groups.
+ACLs are additive model-level CRUD. Record rules filter rows: global rules intersect, group rules unify, and global/group sets intersect. Field `groups=` removes fields from views, `fields_get()`, and explicit read/write access outside the group.
 
 ```csv
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_business_trip_user,business.trip user,model_business_trip,base.group_user,1,1,1,0
 access_business_trip_manager,business.trip manager,model_business_trip,my_module.group_trip_manager,1,1,1,1
 ```
-
-## Record rules filter rows
 
 ```xml
 <record id="business_trip_rule_owner" model="ir.rule">
@@ -28,23 +26,11 @@ access_business_trip_manager,business.trip manager,model_business_trip,my_module
 </record>
 ```
 
-Composition rules that matter:
-
-- global rules intersect
-- group rules unify
-- global and group rule sets intersect
-
-This is why multiple global rules are dangerous: they can accidentally intersect down to zero rows.
-
-## Field groups strip field visibility
-
 ```python
 secret_amount = fields.Float(groups="my_module.group_trip_manager")
 ```
 
-If the user is outside those groups, the field disappears from views, `fields_get()`, and explicit read/write access.
-
-## Public methods are part of the attack surface
+## Public Methods Are Attack Surface
 
 Any public model method is callable via RPC with caller-chosen parameters and recordsets.
 
@@ -67,28 +53,12 @@ class BusinessTrip(models.Model):
         self.write({"state": "confirmed"})
 ```
 
-## `sudo()` is a scalpel, not a default
+## Bypass Rules
 
-- `sudo()` bypasses ACLs and record rules.
-- Keep the privileged block as small as possible.
-- Do not hand a sudoed recordset back to normal flows unless that is truly intended.
-- If the goal is "behave as another user", prefer `with_user(...)` over blanket `sudo()`.
-
-## Raw SQL bypasses the whole security stack
-
-Cursor-level SQL skips access rights, record rules, and ORM cache behavior. If the ORM can express the query, use the ORM first.
-
-## Never interpolate SQL by hand
-
-Bad:
-
-```python
-self.env.cr.execute(
-    "SELECT id FROM business_trip WHERE user_id IN (%s)" % ",".join(map(str, ids))
-)
-```
-
-Better:
+- `sudo()` bypasses ACLs and record rules; keep it narrow and do not leak sudoed recordsets.
+- Use `with_user(...)` when the goal is "act as this user", not "bypass everything".
+- Raw SQL skips ACLs, record rules, ORM cache behavior, and company safeguards; use ORM first.
+- Never interpolate SQL by hand. Use `odoo.tools.SQL(...)`.
 
 ```python
 from odoo.tools import SQL
@@ -99,9 +69,12 @@ self.env.cr.execute(
 )
 ```
 
-## Build domains safely
+## Data Input Rules
 
-Do not append caller-provided domain fragments blindly. Compose with `Domain(...)` and add your security predicates explicitly.
+- Build domains with `Domain(...)`; do not blindly append caller-provided domain fragments.
+- Prefer typed parsers over `safe_eval`: `json.loads`, `ast.literal_eval`, `int`, `float`.
+- Use `record[field_name]` for dynamic field names, not `getattr(record, field_name)` or `setattr(...)`.
+- Escape before mixing data into HTML; treat `Markup` as code and plain strings as text.
 
 ```python
 from odoo.fields import Domain
@@ -111,26 +84,8 @@ secure_domain = user_domain & Domain("user_id", "=", self.env.uid)
 records = self.search(secure_domain)
 ```
 
-## `safe_eval` is still privileged execution
-
-Prefer typed parsers:
-
-- `json.loads(...)`
-- `ast.literal_eval(...)`
-- `int(...)`, `float(...)`
-
-## Escape before mixing data into HTML
-
 ```python
 from markupsafe import Markup, escape
 
 message = Markup("<strong>%s</strong>") % escape(record.name)
 ```
-
-- never trust `t-raw` with evolving content
-- keep HTML structure separate from data
-- treat `Markup` objects as code, plain strings as text
-
-## Dynamic field access: use `record[field_name]`
-
-Avoid `getattr(record, field_name)` or `setattr(...)` for user-provided field names.

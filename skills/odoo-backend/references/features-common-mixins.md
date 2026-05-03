@@ -5,11 +5,11 @@ description: "The common backend mixins worth reusing before inventing custom pl
 
 # Common Mixins
 
-Only keep the mixins that routinely replace a lot of custom backend plumbing. The broader feature catalog is not worth loading into context unless the task is specifically about it.
+Use shipped mixins before inventing custom chatter, email alias, or activity plumbing.
 
 ## `mail.thread`
 
-Use it for chatter, followers, message posting, and field tracking.
+Use for chatter, followers, message posting, and field tracking.
 
 ```python
 from odoo import fields, models
@@ -29,11 +29,11 @@ Form view:
 <chatter open_attachments="True"/>
 ```
 
-Usual follow-ups are `tracking=True` on fields and occasional `_track_subtype(...)` overrides when status transitions need a custom subtype.
+Usual follow-ups: `tracking=True` and occasional `_track_subtype(...)` for transition-specific subtypes.
 
 ## `mail.alias.mixin`
 
-Use it when a parent record should own an inbound email alias that creates child records.
+Use when a parent record owns an inbound email alias that creates child records.
 
 Required overrides:
 
@@ -42,7 +42,7 @@ Required overrides:
 
 ## `mail.activity.mixin`
 
-Use it when records need scheduled follow-up work inside chatter.
+Use when records need scheduled follow-up work inside chatter.
 
 ```python
 class BusinessTrip(models.Model):
@@ -50,8 +50,8 @@ class BusinessTrip(models.Model):
     _inherit = ["mail.thread", "mail.activity.mixin"]
 ```
 
-This enables activity widgets and scheduling flows without custom tables.
+This enables activity widgets and scheduling without custom tables.
 
 ## Source-backed rule of thumb
 
-If the behavior is chatter, aliasing, tracking, or activities, prefer the shipped mixin before inventing tables, mail routes, or controllers.
+For chatter, aliasing, tracking, or activities, prefer the mixin before custom tables, mail routes, or controllers.

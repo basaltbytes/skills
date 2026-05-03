@@ -5,21 +5,17 @@ description: Python backend tests, Odoo test helpers, tags, `Form`, `HttpCase`, 
 
 # Backend Testing and Tours
 
-Use this file for the Odoo-specific pieces that matter in backend tests: class choice, `Form`, tags, tours, and query budgets.
+Use this for Odoo-specific backend testing: class choice, `Form`, tags, tours, and query budgets.
 
 ## Base class choice
 
-- `TransactionCase`: default choice for model/business logic tests
-- `SingleTransactionCase`: share one transaction across tests in the class
-- `HttpCase`: use when browser or HTTP flows are involved
-
-Helpers worth remembering:
-
-- `ref(...)`
-- `browse_ref(...)`
-- `Form`
-- `M2MProxy`
-- `O2MProxy`
+| Base/helper | Use |
+| --- | --- |
+| `TransactionCase` | Default for model/business logic |
+| `SingleTransactionCase` | One transaction shared across class tests |
+| `HttpCase` | Browser or HTTP flows |
+| `ref`, `browse_ref` | XML ID lookup |
+| `Form`, `M2MProxy`, `O2MProxy` | Form/onchange/relational widget-like tests |
 
 ## Minimal `TransactionCase`
 
@@ -73,10 +69,6 @@ class TestTripTour(HttpCase):
 
 Tour JS must be added to assets and registered in the tour registry.
 
-## Debugging tours
-
-Useful local flags include `watch=True`, `debug=True`, `break: true`, and `pause: true`.
-
 ## Query-count assertions
 
 For backend performance regressions, assert query budgets directly:
@@ -88,4 +80,4 @@ with self.assertQueryCount(11):
 
 ## Use the dedicated JS testing skill for frontend mechanics
 
-This reference keeps only the backend and integration angle. For Hoot, web test helpers, or mock-server specifics, load the `odoo-19-javascript-testing` skill instead.
+This reference keeps only the backend/integration angle. For Hoot, web helpers, mock server, `watch=True`, `debug=True`, `break: true`, or `pause: true`, load `odoo-javascript-testing`.
