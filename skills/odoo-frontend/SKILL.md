@@ -4,7 +4,7 @@ description: "Use when working on Odoo 19 web-client customizations in JavaScrip
 metadata:
   author: Philippe L'ATTENTION
   version: "2026.4.22"
-  source: Generated from https://github.com/odoo/documentation, merged with source-verified view references from https://github.com/odoo/odoo, expanded with tutorial-derived frontend patterns from master_odoo_web_framework, cross-checked against local solution addons in `sources/odootutorials`, then manually trimmed to the highest-signal agent guidance; scripts located at https://github.com/phildl/skills
+  source: Generated from https://github.com/odoo/documentation, merged with source-verified view references from https://github.com/odoo/odoo, expanded with tutorial-derived frontend patterns from master_odoo_web_framework, cross-checked against local solution addons in `sources/odootutorials`, then manually trimmed to the highest-signal agent guidance; scripts located at https://github.com/basaltbytes/skills
 ---
 
 > The skill is based on Odoo 19.0 documentation, source-verified view references, tutorial-derived frontend patterns, and local solved tutorial addons, then trimmed on 2026-04-22 to keep only high-signal Odoo-specific frontend guidance.

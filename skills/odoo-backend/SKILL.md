@@ -4,7 +4,7 @@ description: "Use when working on Odoo 19 server-side code or backend tests: Pyt
 metadata:
   author: Philippe L'ATTENTION
   version: "2026.4.22"
-  source: Generated from https://github.com/odoo/documentation, scripts located at https://github.com/phildl/skills
+  source: Generated from https://github.com/odoo/documentation, scripts located at https://github.com/basaltbytes/skills
 ---
 
 > The skill is based on Odoo 19.0 backend and external API documentation, generated at 2026-04-22.

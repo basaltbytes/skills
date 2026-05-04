@@ -1,17 +1,17 @@
-# phildl/skills
+# basaltbytes/skills
 
 A small collection of [Agent Skills](https://agentskills.io/home) focused on Odoo 19 development.
 
 ## Installation
 
 ```bash
-pnpx skills add phildl/skills --skill='*'
+pnpx skills add basaltbytes/skills --skill='*'
 ```
 
 or globally:
 
 ```bash
-pnpx skills add phildl/skills --skill='*' -g
+pnpx skills add basaltbytes/skills --skill='*' -g
 ```
 
 Learn more about the CLI usage at [skills](https://github.com/vercel-labs/skills).

@@ -150,7 +150,7 @@ description: { description }
 metadata:
   author: Philippe L'ATTENTION
   version: "2026.1.1"
-  source: Generated from {source-url}, scripts located at https://github.com/phildl/skills
+  source: Generated from {source-url}, scripts located at https://github.com/basaltbytes/skills
 ---
 
 > The skill is based on {project} v{version}, generated at {date}.
