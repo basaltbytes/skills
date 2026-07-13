@@ -37,6 +37,11 @@ These patterns are how readers spot AI text even when vocabulary is clean.
 
 **Let paragraphs end abruptly.** Not every paragraph needs a summary or transition. Sometimes just stop.
 
+**No technical jargon overloading** When presenting a technical or domain specific concept, it's good to 
+use the jargon and technical term of the business but keep the sentences grounded in reality. Someone 
+eavesdropping on the conversation should understand what you are talking about even if they miss one or 
+two technical words.
+
 ## Punctuation Rules
 
 **Em dashes:** Maximum ONE per 500 words. The single most cited AI tell in existence. Use commas, semicolons, colons, parentheses, or new sentences instead.
@@ -69,7 +74,6 @@ These patterns are how readers spot AI text even when vocabulary is clean.
 
 **Never invent anecdotes or present hypotheticals as real.** Use "imagine..." or "suppose..." for hypotheticals. Fabricated specificity is worse than honest vagueness.
 
-**Use the less obvious word.** AI defaults to the highest-probability token. Reach past the first word that comes to mind.
 
 ## Accuracy and Honesty
 
