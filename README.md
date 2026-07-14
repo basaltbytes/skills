@@ -29,10 +29,19 @@ pnpx skills add basaltbytes/skills --skill='*' -g
 
 Learn more about the CLI usage at [skills](https://github.com/vercel-labs/skills).
 
+## Coding guidelines
+
+[CODING_GUIDELINES.md](CODING_GUIDELINES.md) is the practices charter these skills
+distribute slices of — domain integrity (always-valid), functional-core architecture,
+error discipline, and hygiene. To put it in force in a project, copy it into the repo
+and `@`-import it from `CLAUDE.md`/`AGENTS.md` — a bare link is not auto-loaded, so
+agents may never read it.
+
 ## Skills
 
 | Skill                                                           | Description                                                                                                                                                                                                      |
 | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [always-valid-domain](skills/always-valid-domain)               | Always-valid domain modeling — entities and value objects validate their own integrity at construction (parse-don't-validate, newtype/branded types, illegal states unrepresentable), with pydantic v2 strict and Zod mappings. |
 | [anti-slop-writing](skills/anti-slop-writing)                   | Produces human-sounding text that avoids detectable AI writing patterns — banned vocabulary, structural variety, punctuation discipline, and voice calibration for any writing task.                            |
 | [code-walkthrough](skills/code-walkthrough)                     | Generates an interactive, GitHub-styled single-file HTML walkthrough of a PR or code change — model diagram, fields and methods, views, wizards, security, and a files-changed list.                            |
 | [odoo](skills/odoo)                                             | Router skill for broad or cross-cutting Odoo 19 work; points agents to the narrower backend, frontend, JavaScript testing, or Owl skill without duplicating references.                                          |
