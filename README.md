@@ -37,15 +37,28 @@ error discipline, idempotent workflows, observability, testing, and hygiene. It 
 inside the coding-guidelines skill so installing the skill delivers the charter and
 its language mappings together, at a stable path.
 
-To put it in force in a project, install the skill, then `@`-import the file from
-`CLAUDE.md`/`AGENTS.md`:
+Two ways to use it:
 
-```markdown
-@.claude/skills/coding-guidelines/CODING_GUIDELINES.md
-```
+- **On demand** — install the skill and you're done: agents pull the charter when
+  the work matches (domain modeling, boundary parsing, error handling, test design),
+  and you can always invoke `/coding-guidelines` by hand.
+- **Always on** — to make the charter standing law in a project rather than a
+  matched-task guest, `@`-import it from `CLAUDE.md` (a bare link is not
+  auto-loaded, so agents may never read it):
 
-The `@`-import matters — a bare link is not auto-loaded, so agents may never read it.
-Skill updates then refresh the charter too; no vendored copy to go stale.
+  ```markdown
+  @.claude/skills/coding-guidelines/CODING_GUIDELINES.md
+  ```
+
+  For a global install, import `@~/.claude/skills/coding-guidelines/CODING_GUIDELINES.md`.
+  For agents that read `AGENTS.md` without `@`-import support, write it as an
+  instruction instead: "Read and apply `.claude/skills/coding-guidelines/CODING_GUIDELINES.md`
+  before writing code." Plugin-marketplace installs live in the plugin cache without
+  a stable path — use the on-demand mode there, or install via the skills CLI to get
+  the importable path.
+
+Either way, skill updates refresh the charter in place; there is no vendored copy to
+go stale.
 
 ## Skills
 
