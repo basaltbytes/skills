@@ -31,19 +31,29 @@ Learn more about the CLI usage at [skills](https://github.com/vercel-labs/skills
 
 ## Coding guidelines
 
-[CODING_GUIDELINES.md](CODING_GUIDELINES.md) is the practices charter these skills
-distribute slices of — domain integrity (always-valid), functional-core architecture,
-error discipline, and hygiene. To put it in force in a project, copy it into the repo
-and `@`-import it from `CLAUDE.md`/`AGENTS.md` — a bare link is not auto-loaded, so
-agents may never read it.
+[CODING_GUIDELINES.md](skills/coding-guidelines/CODING_GUIDELINES.md) is the
+practices charter — domain integrity (always-valid), functional-core architecture,
+error discipline, idempotent workflows, observability, testing, and hygiene. It ships
+inside the coding-guidelines skill so installing the skill delivers the charter and
+its language mappings together, at a stable path.
+
+To put it in force in a project, install the skill, then `@`-import the file from
+`CLAUDE.md`/`AGENTS.md`:
+
+```markdown
+@.claude/skills/coding-guidelines/CODING_GUIDELINES.md
+```
+
+The `@`-import matters — a bare link is not auto-loaded, so agents may never read it.
+Skill updates then refresh the charter too; no vendored copy to go stale.
 
 ## Skills
 
 | Skill                                                           | Description                                                                                                                                                                                                      |
 | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [always-valid-domain](skills/always-valid-domain)               | Always-valid domain modeling — entities and value objects validate their own integrity at construction (parse-don't-validate, newtype/branded types, illegal states unrepresentable), with pydantic v2 strict and Zod mappings. |
 | [anti-slop-writing](skills/anti-slop-writing)                   | Produces human-sounding text that avoids detectable AI writing patterns — banned vocabulary, structural variety, punctuation discipline, and voice calibration for any writing task.                            |
 | [code-walkthrough](skills/code-walkthrough)                     | Generates an interactive, GitHub-styled single-file HTML walkthrough of a PR or code change — model diagram, fields and methods, views, wizards, security, and a files-changed list.                            |
+| [coding-guidelines](skills/coding-guidelines)                   | The basaltbytes practices charter shipped as a skill — always-valid domain modeling with pydantic v2 strict and Zod mappings, functional-core architecture, error discipline, idempotent workflows, observability, testing, and hygiene. |
 | [odoo](skills/odoo)                                             | Router skill for broad or cross-cutting Odoo 19 work; points agents to the narrower backend, frontend, JavaScript testing, or Owl skill without duplicating references.                                          |
 | [odoo-backend](skills/odoo-backend)                             | Odoo 19 backend and server-side work — Python models, ORM, fields, ACLs and record rules, data files, actions, cron jobs, controllers, JSON-2 and legacy RPC integrations, reports, testing, mixins, and performance. |
 | [odoo-frontend](skills/odoo-frontend)                           | Odoo 19 frontend and web-client work — runtime architecture, assets, modules, services, registries, hooks, generic components, views, field/view widgets, arch XML, XPath inheritance, and custom-view patterns. |

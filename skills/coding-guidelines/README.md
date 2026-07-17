@@ -1,13 +1,11 @@
-# always-valid-domain
+# coding-guidelines
 
-Agent rules for always-valid domain modeling: entities and value objects validate their
-own integrity at construction, boundaries parse raw input into domain types, and the
-interior trusts what it receives. The rules live in [SKILL.md](SKILL.md); language
-mappings in [PYTHON.md](PYTHON.md) (pydantic v2 strict) and
-[TYPESCRIPT.md](TYPESCRIPT.md) (Zod). This skill is the agent-loadable slice of the
-broader [CODING_GUIDELINES.md](../../CODING_GUIDELINES.md), which extends these five
-rules with architecture (functional core, ports and adapters, ACL, CQRS-light),
-error-handling, and hygiene practices.
+The basaltbytes practices charter, shipped as a skill. [CODING_GUIDELINES.md](CODING_GUIDELINES.md)
+covers always-valid domain modeling (section 1), functional-core architecture,
+error discipline, workflow/idempotency, observability, testing, and hygiene.
+[SKILL.md](SKILL.md) is the trigger that pulls agents into the charter on demand;
+language mappings for section 1 live in [PYTHON.md](PYTHON.md) (pydantic v2 strict)
+and [TYPESCRIPT.md](TYPESCRIPT.md) (Zod).
 
 ## Sources, inspiration, literature
 

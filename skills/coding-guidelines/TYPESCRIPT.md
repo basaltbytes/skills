@@ -53,15 +53,12 @@ const Evaluation = z.discriminatedUnion("status", [
 ]);
 ```
 
-If a function needs `x!` or `if (!x) throw`, the state model is wrong — introduce the
-variant in which `x` cannot be absent.
-
 ## Discipline
 
 - `schema.parse(...)` / `safeParse(...)` at every edge: HTTP, DB rows, env
-  (`Env.parse(process.env)` once at boot), queues, files. Nothing raw travels inward.
-- Never `as X` past an edge, never `!` in domain code — both are narrowing lies the
-  runtime won't honor.
+  (`Env.parse(process.env)` once at boot), queues, files.
+- Never `as X` past an edge, never `!` in domain code — narrowing lies the runtime
+  won't honor. Parse, or introduce the variant in which the value cannot be absent.
 - Cross-field invariants live in the schema (`.refine`/`.superRefine`), so the parse
   is the single gate — not spread across call-sites.
 - `ZodError` is edge vocabulary: translate it there (400 + issues); domain code never
