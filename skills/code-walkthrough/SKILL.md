@@ -1,6 +1,6 @@
 ---
 name: code-walkthrough
-description: Generate an interactive, GitHub-styled single-file HTML walkthrough of a pull request or code change — UML-ish model diagram, fields & methods, views, wizards, security, and a Files-changed list. Use when the user asks to visualize, explain, or document a PR/diff/change, asks for a "code walkthrough" or "PR walkthrough", says "visualize this change", or wants a shareable HTML explainer. Odoo-focused but works for any codebase.
+description: Generate an interactive, GitHub-styled single-file HTML walkthrough of a pull request or code change — UML-ish model diagram, fields & methods, views, wizards, security, a translations widget (.po counts, not diffs), test TLDRs, and a Files-changed list. Use when the user asks to visualize, explain, or document a PR/diff/change, asks for a "code walkthrough" or "PR walkthrough", says "visualize this change", or wants a shareable HTML explainer. Odoo-focused but works for any codebase.
 ---
 
 # Code walkthrough
@@ -46,6 +46,9 @@ open docs/walkthroughs/pr-NNN.html
 
 1. **Gather the change.** `gh pr view <n> --json title,number,url,author,baseRefName,headRefName,additions,deletions,changedFiles,body,files` (the `files` array carries per-file `additions`/`deletions` → the `+N −M` counts) and `gh pr diff <n>`. Read the new and changed files. Note the canonical **PR url** — the header links to it.
 2. **Extract the anatomy** (see REFERENCE.md → "What to extract"): new models (and `_auto=False` SQL views), modified models with their new fields (`compute`, `@api.depends`, relations) and methods, new/changed views and their *intent*, wizards (transient models — say "none" explicitly if there are none and why), security (`ir.model.access.csv` rows + `ir.rule` records), and the **why** in plain language. For frontend-heavy PRs (OWL components, JS views, services, QWeb templates, Hoot tests) use REFERENCE.md → "Frontend / OWL PRs": same section skeleton, components instead of models — lean on the `odoo-frontend` and `owl` skills to read the code accurately.
+   **Views, translations, and tests each get their own section** (own sidebar entry):
+   - *Translations* (`i18n/*.po`, `*.pot`): never paste `.po` diffs or list msgids. Count entries per file and emit one `i18n` block — one row per language plus the template (REFERENCE.md → "Translations").
+   - *Tests*: read them fully, then emit a `tests` block — a TLDR per test: 1–2 sentence scenario plus the key assertions, paraphrased. No full test diffs (REFERENCE.md → "Tests").
 3. **Author the content module.** Copy `examples/pr-96.content.mjs`. Fill `pr`, `files[]`, and `sections[]` from the block catalog (REFERENCE.md). Put code in `String.raw` template literals — the builder HTML-escapes it.
 4. **Build & verify.** Run `build.mjs`, open the HTML, click a diagram node, confirm sidebar filename colors (green = added, amber = modified) and the GitHub link.
 

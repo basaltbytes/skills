@@ -84,6 +84,10 @@ function renderBlock(b, ctx) {
       return renderPatterns(b);
     case "removed":
       return renderRemoved(b, ctx);
+    case "i18n":
+      return renderI18n(b, ctx);
+    case "tests":
+      return renderTests(b, ctx);
     case "diagram":
       return renderDiagram(b, ctx);
     case "files":
@@ -190,6 +194,66 @@ function renderRemoved(b, ctx) {
     })
     .join("\n");
   return `<div class="gh-box removed">${head}${rows}</div>`;
+}
+
+/* translations widget — one row per .po/.pot file, counts instead of diffs */
+function renderI18n(b, ctx) {
+  const t = ctx.t;
+  const langRows = b.rows.filter((r) => r.lang);
+  const langs = langRows.length;
+  // count real translations, not the .pot template — fall back to it on template-only PRs
+  const touched = (langRows.length ? langRows : b.rows).reduce(
+    (n, r) => n + ((r.entries?.new || 0) + (r.entries?.updated || 0) + (r.entries?.removed || 0)),
+    0
+  );
+  const head = `<div class="bxhead">${oc("globe")}${esc(b.title || t.translations)}<span class="bxmeta">${esc(
+    t.i18nMeta(langs, touched)
+  )}</span></div>`;
+  const rows = b.rows
+    .map((r) => {
+      const [icon, color] = CHIP_ICON[r.status] || CHIP_ICON.M;
+      const { dir, name } = splitPath(r.path);
+      const tag = r.lang
+        ? `<span class="langtag">${esc(r.lang).toUpperCase()}</span>`
+        : `<span class="langtag pot">${esc(t.potTemplate)}</span>`;
+      const e = r.entries || {};
+      const counts =
+        e.new || e.updated || e.removed
+          ? `<span class="i18n-counts">${e.new ? `<span class="c-new">+${esc(t.eNew(e.new))}</span>` : ""}${
+              e.updated ? `<span class="c-upd">~${esc(t.eUpdated(e.updated))}</span>` : ""
+            }${e.removed ? `<span class="c-rem">−${esc(t.eRemoved(e.removed))}</span>` : ""}</span>`
+          : "";
+      const note = r.note ? `<span class="why">— ${r.note}</span>` : "";
+      const ds =
+        r.add != null || r.del != null
+          ? `<span class="ds"><span class="adds">+${r.add || 0}</span> <span class="dels">−${r.del || 0}</span><span class="bar">${diffSquares(r.add, r.del)}</span></span>`
+          : "";
+      return `<div class="i18n-row">${oc(icon, color)}${tag}${dir ? `<span class="dir">${esc(dir)}</span>` : ""}<span class="path">${esc(name)}</span>${counts}${note}${ds}</div>`;
+    })
+    .join("\n");
+  const foot = b.note ? `<div class="bxfoot">${b.note}</div>` : "";
+  return `${b.intro ? `<p class="sec-intro">${b.intro}</p>` : ""}<div class="gh-box i18n">${head}${rows}${foot}</div>`;
+}
+
+/* tests widget — TLDR cards (scenario + key assertions), never the full diff */
+function renderTests(b, ctx) {
+  const t = ctx.t;
+  const head = `<div class="bxhead">${oc("beaker")}${esc(b.title || t.tests)}<span class="bxmeta">${esc(
+    t.testsMeta(b.items.length)
+  )}</span></div>`;
+  const rows = b.items
+    .map((it) => {
+      const badge = it.kind ? `<span class="badge ctx">${esc(it.kind)}</span>` : "";
+      const ref = it.ref ? `<code class="tref">${esc(it.ref)}</code>` : "";
+      const asserts =
+        it.asserts && it.asserts.length
+          ? `<ul class="asserts">${it.asserts.map((a) => `<li>${oc("check-circle-fill")}<span>${a}</span></li>`).join("")}</ul>`
+          : "";
+      const code = it.code ? renderCode({ ...it.code, collapsed: it.code.collapsed ?? true }, ctx) : "";
+      return `<div class="test-row"><div class="thead"><span class="sig">${esc(it.name)}</span>${badge}${ref}</div><p class="scenario">${it.scenario}</p>${asserts}${code}</div>`;
+    })
+    .join("\n");
+  return `${b.intro ? `<p class="sec-intro">${b.intro}</p>` : ""}<div class="gh-box tests">${head}${rows}</div>`;
 }
 
 /* file-status icon + mini diff bar (shared by files list + section chips) */

@@ -35,7 +35,7 @@ export default {
   files: [
     { status: "A", path: "addons/acme_planning/models/planning_pool_item.py", href: "#m-pool", add: 166, del: 0 },
     { status: "A", path: "addons/acme_planning/views/planning_pool_item_views.xml", href: "#views", add: 122, del: 0 },
-    { status: "A", path: "addons/acme_planning/tests/test_planning_pool_item.py", add: 281, del: 0 },
+    { status: "A", path: "addons/acme_planning/tests/test_planning_pool_item.py", href: "#tests", add: 281, del: 0 },
     { status: "A", path: "docs/adr/0008-pool-item-derived-lens-consumed-by-slots.md", add: 47, del: 0 },
     { status: "M", path: "addons/acme_planning/models/planning_allocation.py", href: "#m-alloc", add: 78, del: 0 },
     { status: "M", path: "addons/acme_planning/models/planning_slot.py", href: "#m-slot", add: 21, del: 0 },
@@ -51,8 +51,8 @@ export default {
     { status: "M", path: "addons/acme_planning/__manifest__.py", add: 1, del: 0 },
     { status: "M", path: "addons/acme_planning/tests/__init__.py", add: 1, del: 0 },
     { status: "M", path: "addons/acme_planning/readme/USAGE.md", add: 14, del: 0 },
-    { status: "M", path: "addons/acme_planning/i18n/fr.po", add: 101, del: 0 },
-    { status: "M", path: "addons/acme_planning/i18n/acme_planning.pot", add: 100, del: 0 },
+    { status: "M", path: "addons/acme_planning/i18n/fr.po", href: "#i18n", add: 101, del: 0 },
+    { status: "M", path: "addons/acme_planning/i18n/acme_planning.pot", href: "#i18n", add: 100, del: 0 },
     { status: "M", path: "CONTEXT.md", add: 8, del: 0 },
   ],
 
@@ -495,6 +495,75 @@ def _check_source_allocation_is_confirmed(self):
       ],
     },
 
+    /* ---- tests (TLDR — never the diff; the reviewer wants what each test proves) ---- */
+    {
+      id: "tests",
+      nav: { label: "Tests", icon: "beaker", group: "Quality" },
+      heading: { icon: "beaker", title: "Tests — what they prove" },
+      files: [{ status: "A", path: "addons/acme_planning/tests/test_planning_pool_item.py" }],
+      blocks: [
+        { c: "intro", html: R`281 lines of tests, summarized: one card per test with the scenario and the key assertions. Open the diff only if a card raises a question.` },
+        {
+          c: "tests",
+          items: [
+            {
+              name: "test_pool_grain",
+              kind: "unit",
+              ref: "tests/test_planning_pool_item.py",
+              scenario: R`Creates allocations in every state (draft, converted, cancelled) plus one archived. Reads the pool view.`,
+              asserts: [
+                R`Only <b>active + Converted</b> allocations produce a pool item.`,
+                R`One row per allocation — never per person×month.`,
+              ],
+            },
+            {
+              name: "test_live_consumption",
+              kind: "unit",
+              scenario: R`Links slots to a 40 h allocation, then walks the full lifecycle: <b>create → resize → reassign → cancel → unlink</b>.`,
+              asserts: [
+                R`Each step moves <code>placed_hours</code> / <code>remaining_hours</code> immediately — nothing is stored or decremented.`,
+                R`A cancelled slot stops counting; unlink restores the remaining charge.`,
+              ],
+            },
+            {
+              name: "test_overconsumption_floor",
+              kind: "unit",
+              scenario: R`Plans 48 h of slots against a 40 h allocation.`,
+              asserts: [R`<code>remaining_hours</code> floors at <b>0.0</b> — never negative in the pool.`],
+            },
+            {
+              name: "test_allocation_link_constraint",
+              kind: "unit",
+              scenario: R`Tries to point <code>planning.slot.allocation_id</code> at a forecast allocation, then at an archived one, via <code>write()</code> (not the UI).`,
+              asserts: [R`Both writes raise <code>ValidationError</code> — the picker domain is defended by <code>@api.constrains</code>.`],
+            },
+          ],
+        },
+      ],
+    },
+
+    /* ---- translations (counts, not diffs — .po churn carries no review signal) ---- */
+    {
+      id: "i18n",
+      nav: { label: "Translations", icon: "globe", group: "Quality" },
+      heading: { icon: "globe", title: "Translations" },
+      files: [
+        { status: "M", path: "addons/acme_planning/i18n/fr.po" },
+        { status: "M", path: "addons/acme_planning/i18n/acme_planning.pot" },
+      ],
+      blocks: [
+        { c: "intro", html: R`201 diff lines collapse to one fact: every new label shipped with its French translation in the same PR. Nothing here needs line-by-line review.` },
+        {
+          c: "i18n",
+          rows: [
+            { path: "i18n/fr.po", status: "M", lang: "fr", add: 101, del: 0, entries: { new: 31, updated: 2 } },
+            { path: "i18n/acme_planning.pot", status: "M", add: 100, del: 0, entries: { new: 31 }, note: "regenerated from source — in sync" },
+          ],
+          note: R`31 new entries = the pool item fields, view labels and the two smart buttons. The 2 updated French strings fix wording on existing allocation labels.`,
+        },
+      ],
+    },
+
     /* ---- concepts ---- */
     {
       id: "concepts",
@@ -525,10 +594,6 @@ def _check_source_allocation_is_confirmed(self):
       heading: { icon: "file-diff", title: R`Files changed <span class="tag" style="font-size:13px">21 files</span>` },
       blocks: [
         { c: "files" },
-        { c: "h3", text: "Test coverage added" },
-        { c: "p", html: R`<code>test_planning_pool_item.py</code> (281 lines) asserts grain (active+converted only), day↔hour conversion,
-          person vs “To assign” labelling, and the live consumption path — <b>create → resize → reassign → cancel → unlink</b> all
-          move placed/remaining correctly, plus the floor when slots exceed the total and the constraint rejecting forecast/archived links.` },
       ],
     },
   ],

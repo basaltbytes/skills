@@ -16,7 +16,31 @@ text/`html` fields is passed through as raw HTML, so you may use `<code>`, `<b>`
 | Views & intent | `views/*.xml` records, inherited XPath, smart buttons | `views` section (`cards` + `table` + `code`) |
 | Wizards | `wizards/` `TransientModel`; if none, say so and why | `wizards` section |
 | Security | `security/ir.model.access.csv` (CRUD matrix), `ir.rule` records | `matrix` + `code` |
+| Translations | `i18n/*.po`, `*.pot` — count entries per language, **never paste diffs** | `i18n` block, own section |
+| Tests | `tests/*.py`, tours — read fully, then summarize scenario + assertions | `tests` block, own section |
 | Why | PR body, linked issue, ADR/PRD, CONTEXT.md | `narrative` section |
+
+**Keep views, translations, and tests in separate sections**, each with its own nav
+entry — do not fold them into model sections. Reviewers must be able to skip the
+translation flood in one glance and still find it in the sidebar.
+
+### Translations (`i18n` block) — counts, not diffs
+
+`.po`/`.pot` diffs flood a review and carry near-zero review signal. Never render them
+as `code` blocks and never list every changed msgid. Instead: count entries per file
+(`git diff --numstat` for line counts; count `msgid` additions/changes/removals for
+entry counts, e.g. `gh pr diff <n> -- 'i18n/*.po'` piped through grep) and emit **one
+`i18n` block** with one row per file. Reserve prose for the only reviewable facts: a
+new language added, entries deleted, or the `.pot` template drifting from the source.
+
+### Tests (`tests` block) — TLDR, not the diff
+
+Test diffs are long; the reviewer wants what each test **proves**. Read the test code
+fully, then write one `tests` item per test (or per test class when tests are tiny):
+one-to-two-sentence `scenario` (given/when/then in plain language), then `asserts` —
+the two-to-four key assertions, paraphrased, not pasted. Attach at most one short
+`code` excerpt (collapsed) when a setup trick is itself review-worthy. Tag tours with
+`kind: "tour"`, HTTP cases with `kind: "http"`.
 
 ### Frontend / OWL PRs
 
@@ -31,6 +55,7 @@ structure generalizes from "models" to "components/services":
 | Methods | lifecycle hooks (`onWillStart`/`onMounted`), event handlers, getters | `methods` block — `sig` is the method, `decorator` can hold the hook |
 | Views (arch) | QWeb template (`static/src/**/*.xml`), `js_class`, registry entry | `code` block `lang: "markup"`; a `table` for registry rows |
 | Security | n/a (note assets/manifest instead) | `table` of `assets` bundle entries |
+| Tests | Hoot tests (`static/tests/**`) | `tests` block — same TLDR discipline: scenario + key `expect(...)`s, no diff |
 | Diagram | component tree / service graph | nodes = components/services; edges = `renders`, `uses`, `patches`, `registered in` |
 
 Code langs: use `lang: "javascript"` for `.js`/`.esm.js`, `lang: "markup"` for QWeb XML,
@@ -69,7 +94,9 @@ export default {
 Each section: `{ id, nav, heading, blocks }`.
 
 - `nav: { label, icon, group }` — sidebar entry. `group` is a header ("Orientation",
-  "Models", "Surface", "Deep dive"); reuse the same string to group entries.
+  "Models", "Surface", "Quality", "Deep dive"); reuse the same string to group entries.
+  Put the Tests and Translations sections under their own group (the examples use
+  "Quality") so a reviewer can skip or find them at a glance.
 - For **file** entries (model files), use `nav: { label: "x.py", group, file: true, status: "A"|"M"|"D" }`
   — the label renders monospace and colored (green added / amber modified / red deleted)
   with the matching file octicon.
@@ -102,6 +129,8 @@ Each section: `{ id, nav, heading, blocks }`.
 | `concepts` | `items: [{ icon (emoji), title, html }]` | emoji-card grid. Legacy/marketing look — avoid; use `patterns`. |
 | `files` | — | renders the GitHub Files-changed list (with `+N −M` + bar) from top-level `files` |
 | `removed` | `title?`, `items: [{ path, del?, why? }]` | red list box for **deleted** files — surface removals first-class on refactor PRs (`why` is plain text, no markup) |
+| `i18n` | `title?`, `intro?`, `note?` (footer html), `rows: [{ path, status?: "A"\|"M", lang?: "fr", add?, del?, entries?: { new?, updated?, removed? }, note? }]` | translation widget: one row per `.po`/`.pot` file — lang tag (omit `lang` for the `.pot` → "template" tag), entry-count chips, `+N −M` bar. **The** way to show translation churn; never paste `.po` diffs |
+| `tests` | `title?`, `intro?`, `items: [{ name, kind?: "unit"\|"tour"\|"http", ref?: "tests/test_x.py", scenario (html), asserts?: [html], code?: { path?, lang?, code } }]` | test TLDR cards: mono test name + kind badge, 1–2 sentence scenario, ✓-list of key assertions, optional collapsed excerpt. Summarize — don't paste the diff |
 | `diagram` | see below | interactive model/component map |
 
 ## Diagram block
@@ -127,9 +156,9 @@ as a `thick` `new` edge.
 
 ## Octicons available (sprite ids `oct-<name>`)
 
-`book` `check-circle-fill` `chevron-down` `chevron-right` `code-square` `columns`
+`beaker` `book` `check-circle-fill` `chevron-down` `chevron-right` `code-square` `columns`
 `database` `diff-added` `diff-modified` `diff-removed` `dot-fill` `eye` `file-added`
-`file-diff` `file` `gear` `git-branch` `git-compare` `git-pull-request` `info` `law`
+`file-diff` `file` `gear` `git-branch` `git-compare` `git-pull-request` `globe` `info` `law`
 `light-bulb` `link-external` `list-unordered` `package` `repo` `rows` `shield-lock` `table`
 
 Use one with `<svg class="octicon"><use href="#oct-NAME"/></svg>` inside any `html`

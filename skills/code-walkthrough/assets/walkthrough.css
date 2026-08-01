@@ -337,3 +337,44 @@
   .removed-row .path { color:var(--txt-mut); text-decoration:line-through; text-decoration-color:rgba(248,81,73,.7); }
   .removed-row .why { color:var(--txt-mut); font-family:var(--sans); }
   .removed-row .dels { margin-left:auto; color:var(--danger); white-space:nowrap; }
+
+  /* shared: right-aligned +N −M meta in a bxhead */
+  .gh-box .bxhead .bxmeta { margin-left:auto; font-weight:400; font-size:12px; color:var(--txt-mut); }
+  .gh-box .bxfoot { padding:9px 14px; border-top:1px solid var(--line-soft); font-size:12.5px; color:var(--txt-mut); }
+
+  /* i18n block — one row per .po/.pot file, entry counts instead of diffs */
+  .i18n-row { display:flex; align-items:center; gap:9px; padding:8px 14px; border-bottom:1px solid var(--line-soft);
+    font-family:var(--mono); font-size:12.5px; }
+  .i18n-row:last-child { border-bottom:none; }
+  .i18n-row:hover { background:var(--panel-2); }
+  .i18n-row .dir { color:var(--txt-mut); }
+  .i18n-row .path { color:var(--txt-dim); }
+  .i18n-row .why { color:var(--txt-mut); font-family:var(--sans); }
+  .langtag { font-size:10px; font-weight:700; letter-spacing:.6px; padding:2px 6px; border-radius:5px;
+    color:var(--accent); background:rgba(124,156,255,.1); border:1px solid rgba(124,156,255,.3); }
+  .langtag.pot { color:var(--txt-mut); background:rgba(127,141,176,.1); border-color:var(--line);
+    text-transform:uppercase; }
+  .i18n-counts { display:inline-flex; gap:8px; font-size:11.5px; white-space:nowrap; }
+  .i18n-counts .c-new { color:var(--new); }
+  .i18n-counts .c-upd { color:var(--mod); }
+  .i18n-counts .c-rem { color:var(--danger); }
+  .i18n-row .ds { margin-left:auto; display:inline-flex; align-items:center; gap:8px; font-size:12px;
+    white-space:nowrap; padding-left:12px; }
+  .i18n-row .ds .adds { color:var(--new); }
+  .i18n-row .ds .dels { color:var(--danger); }
+  .i18n-row .ds .bar { display:inline-flex; gap:2px; }
+  .i18n-row .ds .bar i { width:8px; height:8px; border-radius:2px; background:var(--line-soft); }
+  .i18n-row .ds .bar i.g { background:var(--new); }
+  .i18n-row .ds .bar i.r { background:var(--danger); }
+
+  /* tests block — TLDR cards: scenario + key assertions, code stays collapsed */
+  .test-row { padding:12px 14px; border-bottom:1px solid var(--line-soft); }
+  .test-row:last-child { border-bottom:none; }
+  .test-row .thead { display:flex; align-items:center; gap:9px; flex-wrap:wrap; }
+  .test-row .sig { font-family:var(--mono); font-size:13px; font-weight:600; color:var(--txt); }
+  .test-row .tref { font-family:var(--mono); font-size:11px; color:var(--txt-mut); margin-left:auto; }
+  .test-row .scenario { margin:6px 0 0; font-size:13.5px; color:var(--txt-dim); line-height:1.55; }
+  .asserts { list-style:none; margin:8px 0 0; padding:0; display:flex; flex-direction:column; gap:5px; }
+  .asserts li { display:flex; gap:8px; align-items:baseline; font-size:13px; color:var(--txt-dim); }
+  .asserts li .octicon { width:13px; height:13px; color:var(--new); flex:none; transform:translateY(2px); }
+  .test-row .codeblock { margin-top:10px; }
