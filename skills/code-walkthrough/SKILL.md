@@ -60,6 +60,9 @@ and block catalog.
 
 # Absolute rules of writing quality 
 
+- Be concise, direct and neutral
+- Always write as if the public never read the code and they were not participating in the coding
+session that lead to the PR.
 - If writing in english, ALWAYS report in ASD-STE100 Simplified Technical English
 - Use the /anti-slop-writing and /public-facing-copy skills with sub-agents to self-review your writing
 and the clarity of your walkthrough. Tweak until you have good quality writing
