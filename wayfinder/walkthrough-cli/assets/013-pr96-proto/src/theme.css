@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+/* Primer dark → shadcn slots + domain extensions, per ticket #16 (approved). */
+@theme {
+  --color-background: #0d1117;
+  --color-foreground: #e6edf3;
+  --color-card: #161b22;
+  --color-card-foreground: #e6edf3;
+  --color-primary: #2f81f7;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #21262d;
+  --color-secondary-foreground: #c9d1d9;
+  --color-muted: #21262d;
+  --color-muted-foreground: #7d8590;
+  --color-accent: #21262d;
+  --color-accent-foreground: #e6edf3;
+  --color-destructive: #f85149;
+  --color-border: #30363d;
+  --color-border-soft: #21262d;
+  --color-input: #30363d;
+  --color-ring: #2f81f7;
+
+  /* domain extensions */
+  --color-added: #3fb950;
+  --color-modified: #d29922;
+  --color-removed: #f85149;
+  --color-context: #6e7681;
+  --color-done: #a371f7;
+  --color-open: #238636;
+  --color-accent-muted: #79c0ff;
+
+  --radius-md: 6px;
+  --font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica,
+    Arial, sans-serif;
+}
+
+body {
+  @apply bg-background text-foreground font-sans text-[14px] leading-normal antialiased;
+}
+
+section[id] {
+  scroll-margin-top: 16px;
+}
+
+/* ---- shiki code blocks: line numbers via CSS counters, washes per view ---- */
+.codeblock pre {
+  margin: 0;
+  padding: 12px 0;
+  font-size: 12.5px;
+  line-height: 20px;
+  overflow: auto;
+  max-height: 480px;
+  background: var(--color-background) !important;
+  counter-reset: ln;
+}
+.codeblock pre code {
+  display: block;
+  min-width: max-content;
+}
+.codeblock .line {
+  display: inline-block;
+  width: 100%;
+  padding-right: 16px;
+}
+.codeblock .line::before {
+  counter-increment: ln;
+  content: counter(ln);
+  display: inline-block;
+  width: 52px;
+  padding-right: 16px;
+  text-align: right;
+  color: var(--color-muted-foreground);
+  position: sticky;
+  left: 0;
+  background: inherit;
+}
+
+/* change view: added-line washes derive from --color-added at fixed alpha */
+.view-change .line.add {
+  background: color-mix(in srgb, var(--color-added) 15%, transparent);
+}
+.view-change .line.add::before {
+  content: counter(ln) " +";
+  color: var(--color-added);
+  background: color-mix(in srgb, var(--color-added) 30%, transparent);
+}
+
+/* mark= block highlight: primary wash + 2px inset bar, all views */
+.codeblock .line.hl {
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  box-shadow: inset 2px 0 0 var(--color-primary);
+}
+.view-change .line.add.hl {
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+/* ---- @git-diff-view/react: pull its colors from our tokens ---- */
+.diff-tailwindcss-wrapper {
+  font-family: var(--font-mono);
+}
