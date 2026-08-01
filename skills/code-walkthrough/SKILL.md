@@ -51,8 +51,21 @@ open docs/walkthroughs/pr-NNN.html
 
 ## Writing the "Why this PR exists" section
 
-Lead with it and keep it concrete: a named persona, a before/after, the actual screen.
+Lead with it and keep it concrete, concised: a named persona, a before/after, the actual screen.
 Plain language, no jargon dump. Two-to-four sentences of setup, then the one
 architectural idea a reviewer should check the diff against, then what it deliberately
 doesn't do. Write deliverables in English. See REFERENCE.md for the full content schema
 and block catalog.
+
+
+# Absolute rules of writing quality 
+
+- If writing in english, ALWAYS report in ASD-STE100 Simplified Technical English
+- Use the /anti-slop-writing and /public-facing-copy skills with sub-agents to self-review your writing
+and the clarity of your walkthrough. Tweak until you have good quality writing
+
+## If writing in french
+
+- keep english technical word that are naturally used in technical sphere as english, do not
+do word for word translation
+- use the style of "Rédaction technique simplifiée" mirroring the logic of STE (one term per concept, short active-voice sentences, avoiding metaphors)
