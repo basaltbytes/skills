@@ -7,6 +7,8 @@ description: "High-signal field patterns for Odoo 19 backend code: computed and 
 
 Use this for field behavior that changes correctness: recomputation, inverse behavior, date/datetime handling, and decorators.
 
+- Rely on Odoo's registry setup to initialize a newly added stored field on existing rows from its field default; add a migration only when the backfill differs or needs conditions.
+
 ## Computed fields
 
 ```python
