@@ -9,6 +9,8 @@ description: Keeps public-facing project text user-oriented and free of private 
 
 Write public artifacts for the reader who encounters the project cold. Do not expose the private conversation, the agent's reasoning trail, discarded alternatives, emotional context, or implementation diary.
 
+Use the google dev docs style. More dead prose. No aphorisms, no flourishes. Simple.
+
 ## Use For
 
 - README and documentation edits

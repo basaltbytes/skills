@@ -11,6 +11,10 @@ Produces text that avoids statistically detectable AI writing patterns. Every pi
 
 Load the banned words and phrases list from [references/banned-words.md](references/banned-words.md). Never use any word or phrase on that list. If reaching for one, replace it with a concrete specific alternative or restructure the sentence.
 
+## TLDR
+
+Write in the google dev docs style. More dead prose. No aphorisms, no flourishes. Simple.
+
 ## Structural Rules
 
 These patterns are how readers spot AI text even when vocabulary is clean.
