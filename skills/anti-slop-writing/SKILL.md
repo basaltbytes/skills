@@ -46,15 +46,15 @@ use the jargon and technical term of the business but keep the sentences grounde
 eavesdropping on the conversation should understand what you are talking about even if they miss one or 
 two technical words.
 
-## Error Messages, Logs, Hints, and UI Strings
+## No Literary Verbs For Things
 
-Program output has its own slop: verbs that give files, tags, and commits bodies and intentions. A file "holds" lines, a tag "cannot stand on its own", a group "claims" files, a reference "carries" no attribute, a commit "moves past" the stamp, prose "reaches the payload". Each one reads as literary and tells the reader nothing about what to fix.
+Objects do not have bodies or intentions. A file does not "hold" lines, a tag does not "stand on its own", a group does not "claim" files, a reference does not "carry" an attribute, a commit does not "move past" a stamp, a sentence does not "reach" a reader, a function does not "sit" in a module, a feature does not "ship". Each one reads as literary and tells the reader nothing they can act on. This applies to every kind of text: prose, docs, comments, commit messages, error messages, UI strings, chat replies.
 
-Use the plainest verb that states the fact: is, has, contains, matches, references, is not allowed, is ignored, is out of range. Name the object, state what is wrong, and in the hint say what to change. Do not describe the implementation (the payload, the pool, the stamp) when the user only sees the file they wrote.
+Use the plainest verb that states the fact: is, has, contains, matches, references, is not allowed, is ignored, is out of range. Name the thing, state what is true about it, and if there is something to do, say what to change. Describe what the reader sees, not what the implementation does behind it.
 
-Avoid in program output: claims, holds, carries, reaches, stands, sits, touches, names (as a verb), frames, keys, spells, ships, moves past, fails loudly, falls outside.
+Avoid: claims, holds, carries, reaches, stands, sits, lives, touches, names (as a verb), frames, keys, spells, ships, moves past, fails loudly, falls outside, speaks to, surfaces, lands.
 
-Real rewrites from a CLI linter:
+Real rewrites from a CLI's diagnostics:
 
 | Before | After |
 |---|---|
@@ -75,7 +75,7 @@ Real rewrites from a CLI linter:
 | This build ships: odoo. | Available presets: odoo. |
 | Section ids key the review state. | Section ids identify the review state. |
 
-Test: someone who has never seen the source reads the message once and knows which line to change. If they would have to guess what "holds" or "claims" means in this program, rewrite it.
+Test: someone with no context reads the sentence once and knows what is true and what to do. If they would have to guess what "holds" or "claims" means here, rewrite it.
 
 ## Punctuation Rules
 
@@ -157,6 +157,6 @@ Default if unknown: direct, slightly informal, contractions, occasionally starts
 9. Fabricated any specifics? → Remove or flag as hypothetical.
 10. Could any AI have written this for any person? → Add something specific.
 11. Sounds like ChatGPT? → Rewrite until the answer is no.
-12. Error message, log line, or hint with a verb from the program-output avoid list? → State the fact with is/has/contains/matches.
+12. Any object given a body or an intention (holds, claims, carries, sits, ships)? → State the fact with is/has/contains/matches.
 
 Apply all rules silently. Never mention them. Never say "as per the guidelines." Just write within these constraints.
