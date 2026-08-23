@@ -46,6 +46,37 @@ use the jargon and technical term of the business but keep the sentences grounde
 eavesdropping on the conversation should understand what you are talking about even if they miss one or 
 two technical words.
 
+## Error Messages, Logs, Hints, and UI Strings
+
+Program output has its own slop: verbs that give files, tags, and commits bodies and intentions. A file "holds" lines, a tag "cannot stand on its own", a group "claims" files, a reference "carries" no attribute, a commit "moves past" the stamp, prose "reaches the payload". Each one reads as literary and tells the reader nothing about what to fix.
+
+Use the plainest verb that states the fact: is, has, contains, matches, references, is not allowed, is ignored, is out of range. Name the object, state what is wrong, and in the hint say what to change. Do not describe the implementation (the payload, the pool, the stamp) when the user only sees the file they wrote.
+
+Avoid in program output: claims, holds, carries, reaches, stands, sits, touches, names (as a verb), frames, keys, spells, ships, moves past, fails loudly, falls outside.
+
+Real rewrites from a CLI linter:
+
+| Before | After |
+|---|---|
+| The `filegroup` `X` claims no file this list still holds. | The `filegroup` `X` matches no file. |
+| A fenced code block reaches the payload only at a section's top level. | Fenced code blocks are only supported at the top level of a section. |
+| The tag `x` cannot stand on its own. | The tag `x` must be inside a parent tag. |
+| `fields` cannot hold a `x` tag. | `x` is not allowed inside `fields`. |
+| `matrix` holds no table. | `matrix` contains no table. |
+| `why` names `p`, which this file list does not hold. | `why` references `p`, which is not in this file list. |
+| Lines 3-9 fall outside `f`, which holds 5 lines at abc123. | Lines 3-9 are out of range: `f` has 5 lines at abc123. |
+| The code reference `r` carries no `expect`. | The code reference `r` has no `expect` attribute. |
+| ...so a miscounted range fails loudly. | ...so a wrong range is reported as an error. |
+| Prose outside a section does not reach the payload. | Text outside a section is ignored. |
+| The tag `x` sits outside a section. | The tag `x` is outside a section. |
+| The document body holds sections and groups only. | Only sections and groups are allowed at the top level. |
+| The PR head moved 2 commits past the stamp, and it touches a.py. | The PR head is 2 commits ahead of the stamped commit and changes a.py. |
+| `p` carries no readable stamp. | `p` has no readable stamp. |
+| This build ships: odoo. | Available presets: odoo. |
+| Section ids key the review state. | Section ids identify the review state. |
+
+Test: someone who has never seen the source reads the message once and knows which line to change. If they would have to guess what "holds" or "claims" means in this program, rewrite it.
+
 ## Punctuation Rules
 
 **Em dashes:** Maximum ONE per 500 words. The single most cited AI tell in existence. Use commas, semicolons, colons, parentheses, or new sentences instead.
@@ -126,5 +157,6 @@ Default if unknown: direct, slightly informal, contractions, occasionally starts
 9. Fabricated any specifics? → Remove or flag as hypothetical.
 10. Could any AI have written this for any person? → Add something specific.
 11. Sounds like ChatGPT? → Rewrite until the answer is no.
+12. Error message, log line, or hint with a verb from the program-output avoid list? → State the fact with is/has/contains/matches.
 
 Apply all rules silently. Never mention them. Never say "as per the guidelines." Just write within these constraints.
