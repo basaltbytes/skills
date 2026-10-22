@@ -134,6 +134,21 @@ Test: someone with no context reads the sentence once and knows what is true and
 
 **No markdown in plain text contexts** — emails, DMs, SMS. Asterisks rendering as symbols is an instant tell.
 
+## Writing documentation
+
+**Use noun phrases for titles and headings.** Name every title and heading with a noun phrase that designates the object described; write neither a question nor a verbal sentence. Headings such as "How X runs", "What X does", "When X fails", "Why X is stalled", and possessives such as "The instance's Loops" describe the system as if its parts were people acting in a story. Standard reference documentation uses the subject as the section title: lifecycle, errors, prerequisites, sequence, configuration load points. A reader scanning a table of contents looks for a subject, not a sentence about it.
+
+| Before | After |
+|---|---|
+| How an Attempt runs | Attempt lifecycle |
+| The dogfood instance's Loops | Dogfood instance Loops |
+| When a Loop does not load | Loop load errors |
+| What you need | Prerequisites |
+| Why an Item is stalled | Stalled Items |
+| What the executor does for each kind | Executor behaviour per Worker kind |
+| How the Loops pass work to each other | Hand-off between Loops |
+| Calling the API by hand | Manual API calls |
+
 ## Voice Calibration
 
 When writing for a specific person, match THEIR voice. Ask yourself:
@@ -158,5 +173,6 @@ Default if unknown: direct, slightly informal, contractions, occasionally starts
 10. Could any AI have written this for any person? → Add something specific.
 11. Sounds like ChatGPT? → Rewrite until the answer is no.
 12. Any object given a body or an intention (holds, claims, carries, sits, ships)? → State the fact with is/has/contains/matches.
+13. Any title or heading written as a question or a sentence? → Rename it with a noun phrase that designates its subject.
 
 Apply all rules silently. Never mention them. Never say "as per the guidelines." Just write within these constraints.
