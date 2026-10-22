@@ -136,7 +136,7 @@ Test: someone with no context reads the sentence once and knows what is true and
 
 ## Writing documentation
 
-**No narrated headings.** AI titles a section as a short story about the system: "How an Attempt runs", "What the executor does for each kind", "When a Loop does not load", "Why an Item is stalled", "The dogfood instance's Loops". The question form and the possessive give the parts of a program intentions, and the heading says nothing about what the section contains. Cut the narration and leave the subject; the body explains the rest.
+**No narrated headings.** AI titles a section as a short story about the system: "How an Attempt runs", "What the executor does for each kind", "When a Loop does not load", "Why an Item is stalled", "The dogfood instance's Loops". The question form and the possessive give the parts of a program intentions, and the heading says nothing about what the section contains. Cut the narration and leave the subject; the body explains the rest. The same goes for the body text: "the executor's job", "the Loop's turn", "the Worker decides" are the same pattern in a sentence, so write what the part is or does in plain terms there too.
 
 | Before | After |
 |---|---|
