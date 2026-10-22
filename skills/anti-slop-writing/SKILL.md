@@ -136,7 +136,7 @@ Test: someone with no context reads the sentence once and knows what is true and
 
 ## Writing documentation
 
-**Use noun phrases for titles and headings.** Name every title and heading with a noun phrase that designates the object described; write neither a question nor a verbal sentence. Headings such as "How X runs", "What X does", "When X fails", "Why X is stalled", and possessives such as "The instance's Loops" describe the system as if its parts were people acting in a story. Standard reference documentation uses the subject as the section title: lifecycle, errors, prerequisites, sequence, configuration load points. A reader scanning a table of contents looks for a subject, not a sentence about it.
+**No narrated headings.** AI titles a section as a short story about the system: "How an Attempt runs", "What the executor does for each kind", "When a Loop does not load", "Why an Item is stalled", "The dogfood instance's Loops". The question form and the possessive give the parts of a program intentions, and the heading says nothing about what the section contains. Cut the narration and leave the subject; the body explains the rest.
 
 | Before | After |
 |---|---|
@@ -173,6 +173,6 @@ Default if unknown: direct, slightly informal, contractions, occasionally starts
 10. Could any AI have written this for any person? → Add something specific.
 11. Sounds like ChatGPT? → Rewrite until the answer is no.
 12. Any object given a body or an intention (holds, claims, carries, sits, ships)? → State the fact with is/has/contains/matches.
-13. Any title or heading written as a question or a sentence? → Rename it with a noun phrase that designates its subject.
+13. Any heading that narrates the system (a question, a "How/What/When/Why" opener, a possessive)? → Cut the narration and keep the subject.
 
 Apply all rules silently. Never mention them. Never say "as per the guidelines." Just write within these constraints.
