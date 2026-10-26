@@ -1,0 +1,31 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "eval": "pnpm eval:static",
+    "eval:dev": "node scripts/check-eval-env.mjs && evalite watch",
+    "eval:llm": "node scripts/check-eval-env.mjs && evalite run --threshold 100 evals/skill-routing.eval.ts",
+    "eval:static": "node scripts/eval-skills.mjs",
+    "format": "oxfmt .",
+    "lint": "oxlint",
+    "prepare": "simple-git-hooks && git submodule update --init --recursive",
+    "sources": "node scripts/sources.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "evalite": "1.0.0-beta.16",
+    "lint-staged": "^16.3.3",
+    "oxfmt": "^0.46.0",
+    "oxlint": "^1.60.0",
+    "simple-git-hooks": "^2.13.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.5"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,ts,mjs,mts}": "oxlint --fix"
+  },
+  "packageManager": "pnpm@10.32.1"
+}

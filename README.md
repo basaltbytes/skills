@@ -1,0 +1,83 @@
+# basaltbytes/skills
+
+A small collection of [Agent Skills](https://agentskills.io/home) focused on Odoo 19 development.
+
+## Installation
+
+### Claude Code (plugin marketplace)
+
+Inside Claude Code, add the marketplace and install the plugin that bundles all the skills:
+
+```
+/plugin marketplace add basaltbytes/skills
+/plugin install basaltbytes-skills@basaltbytes
+```
+
+To pull skill updates later, run `/plugin marketplace update basaltbytes`.
+
+### skills CLI (Claude Code, Cursor, Codex, and other agents)
+
+```bash
+pnpx skills add basaltbytes/skills --skill='*'
+```
+
+or globally:
+
+```bash
+pnpx skills add basaltbytes/skills --skill='*' -g
+```
+
+See [vercel-labs/skills](https://github.com/vercel-labs/skills) for all CLI options.
+
+## Coding guidelines
+
+[CODING_GUIDELINES.md](skills/coding-guidelines/CODING_GUIDELINES.md) is the
+practices charter — domain integrity (always-valid), functional-core architecture,
+error discipline, idempotent workflows, observability, testing, and hygiene. It ships
+inside the coding-guidelines skill so installing the skill delivers the charter and
+its language mappings together, at a stable path.
+
+Two ways to use it:
+
+- **On demand** — install the skill and you're done: agents pull the charter when
+  the work matches (domain modeling, boundary parsing, error handling, test design),
+  and you can always invoke `/coding-guidelines` by hand.
+- **Always on** — to make the charter standing law in a project rather than a
+  matched-task guest, `@`-import it from `CLAUDE.md` (a bare link is not
+  auto-loaded, so agents may never read it):
+
+  ```markdown
+  @.claude/skills/coding-guidelines/CODING_GUIDELINES.md
+  ```
+
+  For a global install, import `@~/.claude/skills/coding-guidelines/CODING_GUIDELINES.md`.
+  For agents that read `AGENTS.md` without `@`-import support, write it as an
+  instruction instead: "Read and apply `.claude/skills/coding-guidelines/CODING_GUIDELINES.md`
+  before writing code." Plugin-marketplace installs live in the plugin cache without
+  a stable path — use the on-demand mode there, or install via the skills CLI to get
+  the importable path.
+
+Either way, skill updates refresh the charter in place; there is no vendored copy to
+go stale.
+
+## Skills
+
+| Skill                                                           | Description                                                                                                                                                                                                      |
+| --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [anti-slop-writing](skills/anti-slop-writing)                   | Produces human-sounding text that avoids detectable AI writing patterns — banned vocabulary, structural variety, punctuation discipline, and voice calibration for any writing task.                            |
+| [code-walkthrough](skills/code-walkthrough)                     | Generates an interactive, GitHub-styled single-file HTML walkthrough of a PR or code change — model diagram, fields and methods, views, wizards, security, and a files-changed list.                            |
+| [coding-guidelines](skills/coding-guidelines)                   | The basaltbytes practices charter shipped as a skill — always-valid domain modeling with pydantic v2 strict and Zod mappings, functional-core architecture, error discipline, idempotent workflows, observability, testing, and hygiene. |
+| [odoo](skills/odoo)                                             | Router skill for broad or cross-cutting Odoo 19 work; points agents to the narrower backend, frontend, JavaScript testing, or Owl skill without duplicating references.                                          |
+| [odoo-backend](skills/odoo-backend)                             | Odoo 19 backend and server-side work — Python models, ORM, fields, ACLs and record rules, data files, actions, cron jobs, controllers, JSON-2 and legacy RPC integrations, reports, testing, mixins, and performance. |
+| [odoo-frontend](skills/odoo-frontend)                           | Odoo 19 frontend and web-client work — runtime architecture, assets, modules, services, registries, hooks, generic components, views, field/view widgets, arch XML, XPath inheritance, and custom-view patterns. |
+| [odoo-javascript-testing](skills/odoo-javascript-testing)       | Writing and debugging Odoo 19 frontend JavaScript tests — Hoot, web test helpers, mock server, DOM assertions, mocked services, and async rendering flows.                                                       |
+| [owl](skills/owl)                                               | Writing and debugging OWL 2.x (Odoo Web Library) code for the Odoo 14–19 web client — components, QWeb templates, hooks, reactive state, slots, props, refs, error boundaries, and large-list performance.       |
+| [public-facing-copy](skills/public-facing-copy)                 | Editing public-facing project text so README files, PR bodies, changelogs, release notes, and package copy stay user-oriented and free of private discussion or reasoning logs.                                |
+
+## Credits
+
+The repository layout and the `scripts/sources.ts` script are based on [antfu/skills](https://github.com/antfu/skills) by Anthony Fu.
+
+## License
+
+[MIT](LICENSE.md)

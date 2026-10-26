@@ -1,0 +1,8 @@
+[submodule "sources/odoo"]
+	path = sources/odoo
+	url = https://github.com/odoo/documentation
+	branch = 19.0
+[submodule "sources/odootutorials"]
+	path = sources/odootutorials
+	url = https://github.com/odoo/tutorials
+	branch = master-js-web-framework-solutions

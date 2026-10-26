@@ -1,0 +1,14 @@
+{
+	"name": "basaltbytes",
+	"owner": {
+		"name": "Philippe L'ATTENTION"
+	},
+	"description": "Agent Skills from basaltbytes — Odoo 19 development, writing, and PR-walkthrough utilities.",
+	"plugins": [
+		{
+			"name": "basaltbytes-skills",
+			"source": "./",
+			"description": "Agent Skills for Odoo 19 development (backend, frontend, Owl, JS testing), plus anti-slop writing, public-facing copy, and code-walkthrough utilities."
+		}
+	]
+}
