@@ -1,6 +1,6 @@
 {
 	"name": "basaltbytes-skills",
-	"description": "Agent Skills for Odoo 19 development (backend, frontend, Owl, JS testing), plus anti-slop writing, public-facing copy, and code-walkthrough utilities.",
+	"description": "Agent Skills for Odoo 19 development (backend, frontend, Owl, JS testing), plus coding guidelines, anti-slop writing, and public-facing copy.",
 	"version": "1.0.0",
 	"author": {
 		"name": "Philippe L'ATTENTION"

@@ -14,5 +14,5 @@
     "skipDefaultLibCheck": true,
     "skipLibCheck": true
   },
-  "exclude": ["node_modules", "wayfinder", "sources"]
+  "exclude": ["node_modules", "sources"]
 }
